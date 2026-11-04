@@ -1,4 +1,4 @@
-import { ObstacleData } from "./obstacleData";
+import { ObstacleData } from "./obstacleData.js";
 export class Obstacle {
     static obstacles = [];
     line; //na której linii znajduje się przeszkoda
@@ -10,6 +10,7 @@ export class Obstacle {
         this.obstacle_data = obstacle_type;
     }
     async process() {
+        this.move();
     }
     getLine() {
         return this.line;

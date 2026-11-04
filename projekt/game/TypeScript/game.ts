@@ -1,7 +1,7 @@
-import { Globals } from "./globals"
-import { Player } from "./player"
-import { Line } from "./line"
-import { Obstacle } from "./obstacle"
+import { Globals } from "./globals.js"
+import { Player } from "./player.js"
+import { Line } from "./line.js"
+import { Obstacle } from "./obstacle.js"
 
 abstract class Game{
     private static game_loop_on: boolean = false
@@ -27,6 +27,7 @@ abstract class Game{
                 obstacle.process()
             });
 
+            Player.process()
 
 
 

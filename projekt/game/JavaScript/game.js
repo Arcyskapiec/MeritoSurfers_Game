@@ -1,7 +1,7 @@
-import { Globals } from "./globals";
-import { Player } from "./player";
-import { Line } from "./line";
-import { Obstacle } from "./obstacle";
+import { Globals } from "./globals.js";
+import { Player } from "./player.js";
+import { Line } from "./line.js";
+import { Obstacle } from "./obstacle.js";
 class Game {
     static game_loop_on = false;
     static startGame() {
@@ -18,6 +18,7 @@ class Game {
             Obstacle.getObstacles().forEach(obstacle => {
                 obstacle.process();
             });
+            Player.process();
             await Globals.getFrameElapseTimeout();
         }
     }

@@ -1,4 +1,4 @@
-import { ObstacleData } from "./obstacleData";
+import { ObstacleData } from "./obstacleData.js";
 
 export class Obstacle{
     private static obstacles: Obstacle[] = []
@@ -14,7 +14,7 @@ export class Obstacle{
     }
 
     public async process(): Promise<void>{
-
+        this.move()
     }
 
     public getLine(): number{
@@ -65,7 +65,7 @@ export class Obstacle{
         Obstacle.obstacles.push(new Obstacle(obstacle_type, line))
     }
 
-    async move(): Promise<void> {
+    private async move(): Promise<void> {
         
     }
 }

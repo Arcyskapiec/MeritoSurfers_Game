@@ -1,4 +1,4 @@
-import { Obstacle } from "./obstacle";
+import { Obstacle } from "./obstacle.js";
 
 export abstract class Line{
     private static line_amount: number = 3

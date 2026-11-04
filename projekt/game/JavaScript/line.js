@@ -1,4 +1,4 @@
-import { Obstacle } from "./obstacle";
+import { Obstacle } from "./obstacle.js";
 export class Line {
     static line_amount = 3;
     static canBeEntered(line) {

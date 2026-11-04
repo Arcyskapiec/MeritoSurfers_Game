@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
         "strict": true,
-        "outDir": "./game/JavaScript",
-        "rootDir": "./game/TypeScript"
+
+        "rootDir": "./game/TypeScript",
+        "outDir": "./game/JavaScript"
     },
     "include": [
         "./game/TypeScript/**/*.ts"
