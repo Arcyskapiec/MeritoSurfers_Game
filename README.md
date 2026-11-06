@@ -16,7 +16,7 @@ node ./backend/start.js
 
 ## Skład zespołu (DO UZUPEŁNIENIA)
 - Julia D. - kierownik zespołu
-- Alicja K. - 
+- Alicja K. - Muzyka, Sound, sfx
 - Oleksandr V. - Backend, Node JS, database SQLite
 - Adam Sz. - Super typek generelnie
 - Krzysztof W. - Frontend aka to co user bedzie widzieć
