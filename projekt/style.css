@@ -1,0 +1,12 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game_window{
+    flex: 0 1 auto;
+    height: 800px;
+    width: 1200px;
+    background-color: red;
+}
