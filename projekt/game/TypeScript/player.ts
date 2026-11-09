@@ -10,6 +10,6 @@ export abstract class Player{
     }
 
     public static setLine(line: number): void{
-        this.line = line
+        Player.line = line
     }
 }

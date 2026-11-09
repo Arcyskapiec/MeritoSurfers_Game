@@ -12,6 +12,11 @@ export class Obstacle {
     async process() {
         this.move();
     }
+    static async process() {
+        Obstacle.obstacles.forEach(obstacle => {
+            obstacle.process();
+        });
+    }
     getLine() {
         return this.line;
     }

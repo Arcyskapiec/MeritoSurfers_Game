@@ -22,10 +22,10 @@ export abstract class Line{
     }
 
     public static getRandomLine(): number{
-        return Math.floor(Math.random() * this.line_amount)
+        return Math.floor(Math.random() * Line.line_amount)
     }
 
     public static getMiddleLine(): number{
-        return Math.floor(this.line_amount / 2)
+        return Math.floor(Line.line_amount / 2)
     }
 }

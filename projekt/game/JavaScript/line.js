@@ -16,9 +16,9 @@ export class Line {
         return true;
     }
     static getRandomLine() {
-        return Math.floor(Math.random() * this.line_amount);
+        return Math.floor(Math.random() * Line.line_amount);
     }
     static getMiddleLine() {
-        return Math.floor(this.line_amount / 2);
+        return Math.floor(Line.line_amount / 2);
     }
 }

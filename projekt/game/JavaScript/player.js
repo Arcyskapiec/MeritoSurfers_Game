@@ -7,6 +7,6 @@ export class Player {
         console.log("UwU");
     }
     static setLine(line) {
-        this.line = line;
+        Player.line = line;
     }
 }

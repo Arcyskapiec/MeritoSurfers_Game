@@ -13,8 +13,14 @@ export class Obstacle{
         this.obstacle_data = obstacle_type
     }
 
-    public async process(): Promise<void>{
+    private async process(): Promise<void>{
         this.move()
+    }
+
+    public static async process(): Promise<void>{
+        Obstacle.obstacles.forEach(obstacle => {
+            obstacle.process()
+        });
     }
 
     public getLine(): number{
