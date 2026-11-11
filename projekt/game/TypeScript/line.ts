@@ -1,6 +1,6 @@
 import { Obstacle } from "./obstacle.js";
 
-export abstract class Line{
+export class Line{
     private static line_amount: number = 3
 
     public static canBeEntered(line: number): boolean{

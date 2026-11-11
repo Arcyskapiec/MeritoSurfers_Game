@@ -1,6 +1,5 @@
 import { Globals } from "./globals.js";
 import { Player } from "./player.js";
-import { Line } from "./line.js";
 import { Obstacle } from "./obstacle.js";
 import { Sound } from "./sound.js";
 class Game {
@@ -8,10 +7,9 @@ class Game {
     static startGame() {
         if (Game.game_loop_on) {
             console.log("nie można rozpocząć gry, gdy pętla gry jest aktywna");
-            Sound.stopTrack();
             return;
         }
-        Player.setLine(Line.getMiddleLine());
+        Player.gameStart();
         Sound.setTrack("main-theme.wav");
         Game.startGameLoop();
     }

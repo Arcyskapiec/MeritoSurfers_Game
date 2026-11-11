@@ -10,11 +10,10 @@ abstract class Game{
     public static startGame(): void{
         if (Game.game_loop_on){
             console.log("nie można rozpocząć gry, gdy pętla gry jest aktywna")
-            Sound.stopTrack()
             return
         }
 
-        Player.setLine(Line.getMiddleLine())
+        Player.gameStart()
         Sound.setTrack("main-theme.wav")
 
         Game.startGameLoop()

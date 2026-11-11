@@ -15,23 +15,25 @@ export class InputHandler{
         this.tied_class = self
         this.inputs = inputs
 
-        this.tied_class.html_element.tabIndex = -1 //umożliwia zczytywanie keyboard input dla elementów bez pola na inputu
-
         InputHandler.input_handlers.push(this)
         this.createEventListener()
     }
 
     public async turnOffUntil(async_function: Promise<void>): Promise<void>{
-        this.deleteEventListener
+        this.deleteEventListener()
         await async_function.then(() => this.createEventListener())
     }
 
     private createEventListener(): void{
-        this.tied_class.html_element.addEventListener("keydown", (e) => this.handleKeyboardInput(e), true)
+        document.addEventListener("keydown", this.keyboardListener, true)
     }
 
     private deleteEventListener(): void{
-        this.tied_class.html_element.removeEventListener("keydown", (e) => this.handleKeyboardInput(e), true)
+        document.removeEventListener("keydown", this.keyboardListener, true)
+    }
+
+    private keyboardListener = (e: KeyboardEvent) => {
+        this.handleKeyboardInput(e)
     }
 
     private handleKeyboardInput(input: KeyboardEvent): void{
@@ -46,5 +48,4 @@ export class InputHandler{
         let i: number = InputHandler.input_handlers.indexOf(this)
         InputHandler.input_handlers.splice(i, 1)
     }
-
 }

@@ -6,20 +6,22 @@ export class InputHandler {
     constructor(self, inputs) {
         this.tied_class = self;
         this.inputs = inputs;
-        this.tied_class.html_element.tabIndex = -1; //umożliwia zczytywanie keyboard input dla elementów bez pola na inputu
         InputHandler.input_handlers.push(this);
         this.createEventListener();
     }
     async turnOffUntil(async_function) {
-        this.deleteEventListener;
+        this.deleteEventListener();
         await async_function.then(() => this.createEventListener());
     }
     createEventListener() {
-        this.tied_class.html_element.addEventListener("keydown", (e) => this.handleKeyboardInput(e), true);
+        document.addEventListener("keydown", this.keyboardListener, true);
     }
     deleteEventListener() {
-        this.tied_class.html_element.removeEventListener("keydown", (e) => this.handleKeyboardInput(e), true);
+        document.removeEventListener("keydown", this.keyboardListener, true);
     }
+    keyboardListener = (e) => {
+        this.handleKeyboardInput(e);
+    };
     handleKeyboardInput(input) {
         if (this.inputs.includes(input.key)) {
             this.tied_class.handleInput(input.key);
