@@ -71,7 +71,7 @@ export class Obstacle{
         Obstacle.obstacles.push(new Obstacle(obstacle_type, line))
     }
 
-    private async move(): Promise<void> {
+    private move(): void {
         
     }
 }

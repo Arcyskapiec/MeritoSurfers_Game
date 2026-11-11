@@ -54,6 +54,6 @@ export class Obstacle {
     static spawn(obstacle_type, line) {
         Obstacle.obstacles.push(new Obstacle(obstacle_type, line));
     }
-    async move() {
+    move() {
     }
 }
