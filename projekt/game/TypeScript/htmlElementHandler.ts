@@ -1,4 +1,5 @@
 import { Globals } from "./globals.js"
+import { Line } from "./line.js"
 
 export class htmlElementHandler{
     private static html_element_handlers: htmlElementHandler[] = []
@@ -12,18 +13,26 @@ export class htmlElementHandler{
     private static createHtmlElement(class_name: string): HTMLElement{
         var new_element: HTMLElement = document.createElement("div")
         new_element.className = class_name
+        new_element.style.position = "absolute"
         Globals.game_window.appendChild(new_element)
         return new_element
     }
 
     public setImage(file_name: string): void{
-
         this.html_element.style.backgroundImage = 'url("./img/' + file_name + '")'
         this.html_element.style.backgroundSize = "contain"
         this.html_element.style.backgroundRepeat = "no-repeat"
         this.html_element.style.backgroundPosition = "bottom"
-        this.html_element.style.width = "20%"
-        this.html_element.style.height = "400px"
+
+        this.html_element.style.height = "1000px" //PLACEHOLDER
+    }
+
+    //public setLine()
+
+    public moveTo(line: number, distance: number): void{
+        this.html_element.style.width = Line.getWidthAtDistance(distance).toString() + "px"
+        this.html_element.style.left = Line.getLeftPositionAtDistance(line, distance).toString() + "px"
+        this.html_element.style.bottom = Line.getBottomPositionAtDistance(distance).toString() + "px"
     }
 
     public getHtmlElement(): HTMLElement{

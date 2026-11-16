@@ -1,16 +1,21 @@
 import { ObstacleData } from "./obstacleData.js";
+import { Player } from "./player.js";
+import { htmlElementHandler } from "./htmlElementHandler.js";
 
 export class Obstacle{
     private static obstacles: Obstacle[] = []
 
+    private html_handler: htmlElementHandler;
     private line: number; //na której linii znajduje się przeszkoda
-    private distance: number; //1 to najdalej przed graczem, 0 to poziom gracza, -1 za graczem
+    private distance: number = 1 //1 to najdalej przed graczem, 0 to poziom gracza, -1 za graczem
     private obstacle_data: ObstacleData;
+    private activated: boolean = false
 
     public constructor(obstacle_type: ObstacleData, line: number){
-        this.distance = 1
         this.line = line
         this.obstacle_data = obstacle_type
+        this.html_handler = new htmlElementHandler("obstacle")
+        this.html_handler.setImage("obstacles/tmp_obstacle.png")
     }
 
     private async process(): Promise<void>{
@@ -47,6 +52,7 @@ export class Obstacle{
     }
 
     public delete(): void{
+        this.html_handler.delete()
         let i: number = Obstacle.obstacles.indexOf(this)
         Obstacle.obstacles.splice(i, 1)
     }
@@ -72,6 +78,22 @@ export class Obstacle{
     }
 
     private move(): void {
+        this.distance -= Player.getMovement() * (1 - this.distance) + 0.01
+        console.log(this.distance)
+
+        if (this.distance <= -1){
+            this.delete()
+            return
+        }
+
+        this.html_handler.moveTo(this.line, this.distance)
+    }
+
+    public activateEffect(): void{
+        if (this.activated){
+            return
+        }
         
+        return
     }
 }

@@ -10,7 +10,7 @@ export class Player implements HandleInput{
     private static character_image_source: string //PLACEHOLDER
 
     private static base_speed: number = 3000 //prędkość biegu postaci. Ilość milisekund, jakich potrzebuje by dobiec do nowej przeszkody (albo to, ile czasu przeszkoda potrzebuje, by dotrzeć do gracza xP)
-    public static movement: number //przemieszczenie postaci
+    private static movement: number = 0.01 //przemieszczenie postaci
 
     private static html_handler: htmlElementHandler = new htmlElementHandler("player")
 
@@ -28,14 +28,29 @@ export class Player implements HandleInput{
             
             case "s":
             case "ArrowDown":
+                console.log("S")
                 break;
 
             case "a":
             case "ArrowLeft":
+                console.log("A")
+                if(Line.canBeEntered(Player.line - 1)){
+                    Player.input_handler.turnOffUntil(
+                        Player.moveTo(Player.line - 1)
+                    )
+                }
+
                 break;
 
             case "d":
             case "ArrowRight":
+                console.log("D")
+                if(Line.canBeEntered(Player.line + 1)){
+                    Player.input_handler.turnOffUntil(
+                        Player.moveTo(Player.line + 1)
+                    )
+                }
+
                 break;
 
             default:
@@ -45,13 +60,13 @@ export class Player implements HandleInput{
     //KONIEC RZECZY DLA INPUT HANDLERA
 
     public static gameStart(): void{
-        Player.setCharacter(Globals.character_initials)
-
         Player.setLine(Line.getMiddleLine())
+
+        Player.setCharacter(Globals.character_initials)
     }
 
     public static async process(): Promise<void>{
-        console.log("UwU")
+        Player.html_handler.moveTo(Player.line, 0)
     }
 
     public static setLine(line: number): void{
@@ -60,5 +75,13 @@ export class Player implements HandleInput{
 
     private static setCharacter(character_initials: string): void{
         Player.html_handler.setImage("characters/" + character_initials + "/tmp_character.png")
+    }
+
+    public static getMovement(): number{
+        return Player.movement
+    }
+
+    private static async moveTo(line: number): Promise<void>{
+        Player.setLine(line)
     }
 }

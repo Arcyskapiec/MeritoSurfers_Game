@@ -1,6 +1,5 @@
 import { Globals } from "./globals.js"
 import { Player } from "./player.js"
-import { Line } from "./line.js"
 import { Obstacle } from "./obstacle.js"
 import { Sound } from "./sound.js"
 
@@ -17,6 +16,8 @@ abstract class Game{
         Sound.setTrack("main-theme.wav")
 
         Game.startGameLoop()
+
+        Obstacle.spawnRandom(2)
     }
 
     private static async gameLoop(): Promise<void>{

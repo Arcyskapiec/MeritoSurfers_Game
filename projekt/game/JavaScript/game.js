@@ -12,6 +12,7 @@ class Game {
         Player.gameStart();
         Sound.setTrack("main-theme.wav");
         Game.startGameLoop();
+        Obstacle.spawnRandom(2);
     }
     static async gameLoop() {
         if (Game.game_loop_on == false) {
