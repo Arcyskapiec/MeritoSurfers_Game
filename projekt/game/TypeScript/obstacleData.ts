@@ -3,11 +3,11 @@ import { Player } from "./player.js";
 export class ObstacleData{
     // WSZYSTKIE RODZAJE PRZESZKÓD
     public static obstacle_types: ObstacleData[] = [
-        new ObstacleData("obs1", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs2", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs3", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs4", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs5", "low", 1, 0.1, true, "death")
+        new ObstacleData("obs1", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs2", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs3", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs4", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs5", "low", 1, 0.2, true, "death")
     ];
 
     private level: string; // gdzie postać oberwie efektem przeszkody. low - można nad tym przeskoczyć, high - można się pod tym prześlizgnąć, full - nie ma bata

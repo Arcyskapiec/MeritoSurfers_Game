@@ -5,12 +5,17 @@ export class Sound {
     constructor(file_name, loop) {
         this.audio = Sound.getAudioFromUrl(file_name);
         this.audio.loop = loop;
-        this.audio.play();
         Sound.sounds.push(this);
     }
     stop() {
         this.audio.pause();
         this.delete();
+    }
+    start() {
+        this.audio.play();
+    }
+    setVolume(volume) {
+        this.audio.volume = volume;
     }
     static play(file_name, loop) {
         return new Sound(file_name, loop);
@@ -30,5 +35,9 @@ export class Sound {
     delete() {
         let i = Sound.sounds.indexOf(this);
         Sound.sounds.splice(i, 1);
+    }
+    static playRandom(file_names) {
+        let i = Math.floor(Math.random() * file_names.length);
+        Sound.play(file_names[i], false);
     }
 }

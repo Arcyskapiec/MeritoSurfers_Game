@@ -26,8 +26,10 @@ export class Game {
         Player.process();
     }
     static endGame() {
+        Sound.play("game-over.wav", false);
         console.log("koniec gry");
         Game.stopGameLoop();
+        Player.gameEnd();
         Game.uploadPoints(Game.points);
         Sound.stopTrack();
         Obstacle.deleteAllObstacles();
@@ -42,6 +44,9 @@ export class Game {
     }
     static stopGameLoop() {
         Game.game_loop_on = false;
+    }
+    static isGameLoopOn() {
+        return Game.game_loop_on;
     }
     static async spawnObstacles() {
         if (!Game.game_loop_on) {

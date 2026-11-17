@@ -33,9 +33,11 @@ export class Game{
     }
 
     public static endGame():void{
+        Sound.play("game-over.wav", false)
         console.log("koniec gry")
 
         Game.stopGameLoop()
+        Player.gameEnd()
 
         Game.uploadPoints(Game.points)
         Sound.stopTrack()
@@ -57,6 +59,10 @@ export class Game{
 
     private static stopGameLoop(){
         Game.game_loop_on = false
+    }
+
+    public static isGameLoopOn(): boolean{
+        return Game.game_loop_on
     }
 
     private static async spawnObstacles(): Promise<void>{
