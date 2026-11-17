@@ -3,12 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="theme-color" content="#10151b">
+    <title>WSB surfers</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game_window"></div>
-    <button id="btn_game_start">start</button>
+    <main class="game-shell">
+        <div class="game-content">
+            <header class="game-header">
+                <h1>WSB surfers</h1>
+                <div class="game-hint">
+                    <span class="key-cap">W</span> jump
+                    <span class="hint-divider">·</span>
+                    <span class="key-cap">A</span><span class="key-cap">D</span> move
+                </div>
+            </header>
+            <!-- The leaderboard and game scene sit side by side. -->
+            <div class="game-stage">
+                <aside class="leaderboard panel" aria-labelledby="leaderboard-title">
+                    <h2 id="leaderboard-title">Leaderboard</h2>
+                    <!-- Score rows can be added here when score data is available. -->
+                    <ol class="leaderboard-list" aria-live="polite"></ol>
+                </aside>
+                <div id="game_window" aria-label="Game scene"></div>
+            </div>
+        </div>
+
+        <!-- Character choices and the start button sit below the game. -->
+        <section class="character-picker" aria-labelledby="character-picker-title">
+            <div class="picker-heading">
+                <div>
+                    <p class="panel-eyebrow">PICK YOUR RUNNER</p>
+                    <h2 id="character-picker-title">Choose your character</h2>
+                </div>
+            </div>
+            <div class="picker-controls">
+                <div class="character-options" role="group" aria-label="Choose a character">
+                    <button
+                        class="character-option is-selected"
+                        type="button"
+                        data-character="AS"
+                        aria-pressed="true"
+                        aria-label="Select AS"
+                    >
+                        <span class="character-portrait"><img src="img/characters/AS/tmp_character.png" alt=""></span>
+                        <span class="character-initials">AS</span>
+                        <span class="character-check" aria-hidden="true">✓</span>
+                    </button>
+                    <button
+                        class="character-option"
+                        type="button"
+                        data-character="AK"
+                        aria-pressed="false"
+                        aria-label="Select AK"
+                    >
+                        <span class="character-portrait"><img src="img/characters/AK/tmp_character.png" alt=""></span>
+                        <span class="character-initials">AK</span>
+                        <span class="character-check" aria-hidden="true">✓</span>
+                    </button>
+                    <button
+                        class="character-option"
+                        type="button"
+                        data-character="JD"
+                        aria-pressed="false"
+                        aria-label="Select JD"
+                    >
+                        <span class="character-portrait"><img src="img/characters/JD/tmp_character.png" alt=""></span>
+                        <span class="character-initials">JD</span>
+                        <span class="character-check" aria-hidden="true">✓</span>
+                    </button>
+                    <button
+                        class="character-option"
+                        type="button"
+                        data-character="NN"
+                        aria-pressed="false"
+                        aria-label="Select NN"
+                    >
+                        <span class="character-portrait"><img src="img/characters/NN/tmp_character.png" alt=""></span>
+                        <span class="character-initials">NN</span>
+                        <span class="character-check" aria-hidden="true">✓</span>
+                    </button>
+                    <button
+                        class="character-option"
+                        type="button"
+                        data-character="OV"
+                        aria-pressed="false"
+                        aria-label="Select OV"
+                    >
+                        <span class="character-portrait"><img src="img/characters/OV/tmp_character.png" alt=""></span>
+                        <span class="character-initials">OV</span>
+                        <span class="character-check" aria-hidden="true">✓</span>
+                    </button>
+                </div>
+                <button id="btn_game_start" type="button">
+                    <span>Start running</span>
+                </button>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="game/JavaScript/game.js"></script>
 </body>
-<script type="module" src="game/JavaScript/game.js"></script>
 </html>

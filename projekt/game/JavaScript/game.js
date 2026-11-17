@@ -64,10 +64,25 @@ export class Game {
     }
     static async uploadPoints(points) {
         //upload Points jest wywoływane przy końcu gry
-        points; //ilość zdobytych przez gracza punktów
+        points;
         //walnij tu kod. Żeby go skompilować, odpal terminal w VS i najpierw wejdź do foleru projektu ("cd projekt"), a następnie wpisz komendę "tsc". Powinno się poprawnie skompilować
     }
 }
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY
 let start_game_button = document.getElementById("btn_game_start");
 start_game_button.addEventListener("click", Game.startGame);
+// Save the selected character and update the button states.
+document.querySelectorAll(".character-option").forEach(button => {
+    button.addEventListener("click", () => {
+        const character_initials = button.dataset.character;
+        if (!character_initials) {
+            return;
+        }
+        Globals.character_initials = character_initials;
+        document.querySelectorAll(".character-option").forEach(option => {
+            const is_selected = option === button;
+            option.classList.toggle("is-selected", is_selected);
+            option.setAttribute("aria-pressed", is_selected.toString());
+        });
+    });
+});
