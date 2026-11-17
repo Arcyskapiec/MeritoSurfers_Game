@@ -8,7 +8,7 @@ export class Line {
             return false;
         }
         let line_obstacles = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line);
-        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()));
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleDistance()));
         // jeżeli nie ma na linii przeszkody na poziomie gracza
         if (!(obstacle_on_player_level instanceof Obstacle)) {
             return true;
@@ -22,7 +22,7 @@ export class Line {
     }
     static getObstacleOnPlayerLevel(line) {
         let line_obstacles = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line);
-        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()));
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleDistance()));
         return obstacle_on_player_level;
     }
     static getRandomLine() {

@@ -2,8 +2,9 @@ import { Globals } from "./globals.js";
 import { Player } from "./player.js";
 import { Obstacle } from "./obstacle.js";
 import { Sound } from "./sound.js";
-class Game {
+export class Game {
     static game_loop_on = false;
+    static points = 0;
     static startGame() {
         if (Game.game_loop_on) {
             console.log("nie można rozpocząć gry, gdy pętla gry jest aktywna");
@@ -12,6 +13,8 @@ class Game {
         Player.gameStart();
         Sound.setTrack("main-theme.wav");
         Game.startGameLoop();
+        Game.points = 0;
+        Game.givePoints();
         Game.spawnObstacles();
     }
     static async gameLoop() {
@@ -23,7 +26,10 @@ class Game {
         Player.process();
     }
     static endGame() {
+        console.log("koniec gry");
         Game.stopGameLoop();
+        Game.uploadPoints(Game.points);
+        Sound.stopTrack();
         Obstacle.deleteAllObstacles();
     }
     static startGameLoop() {
@@ -45,6 +51,21 @@ class Game {
         setTimeout(() => {
             Game.spawnObstacles();
         }, 2000);
+    }
+    static async givePoints() {
+        if (!Game.game_loop_on) {
+            return;
+        }
+        setTimeout(() => {
+            Game.givePoints();
+            Game.points += 1;
+            console.log("Points: " + Game.points.toString());
+        }, 1000);
+    }
+    static async uploadPoints(points) {
+        //upload Points jest wywoływane przy końcu gry
+        points; //ilość zdobytych przez gracza punktów
+        //walnij tu kod. Żeby go skompilować, odpal terminal w VS i najpierw wejdź do foleru projektu ("cd projekt"), a następnie wpisz komendę "tsc". Powinno się poprawnie skompilować
     }
 }
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY

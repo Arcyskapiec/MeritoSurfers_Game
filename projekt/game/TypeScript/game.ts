@@ -3,8 +3,9 @@ import { Player } from "./player.js"
 import { Obstacle } from "./obstacle.js"
 import { Sound } from "./sound.js"
 
-abstract class Game{
+export class Game{
     private static game_loop_on: boolean = false
+    private static points: number = 0
 
     public static startGame(): void{
         if (Game.game_loop_on){
@@ -16,6 +17,8 @@ abstract class Game{
         Sound.setTrack("main-theme.wav")
         
         Game.startGameLoop()
+        Game.points = 0
+        Game.givePoints()
         Game.spawnObstacles()
     }
 
@@ -30,9 +33,15 @@ abstract class Game{
     }
 
     public static endGame():void{
+        console.log("koniec gry")
+
         Game.stopGameLoop()
 
+        Game.uploadPoints(Game.points)
+        Sound.stopTrack()
+
         Obstacle.deleteAllObstacles()
+
     }
 
     private static startGameLoop(): void{
@@ -59,6 +68,25 @@ abstract class Game{
         setTimeout(() => {
             Game.spawnObstacles()
         }, 2000);
+    }
+
+    private static async givePoints(): Promise<void>{
+        if(!Game.game_loop_on){
+            return
+        }
+
+        setTimeout(() => {
+            Game.givePoints()
+            Game.points += 1
+            console.log("Points: " + Game.points.toString())
+        }, 1000);
+        
+    }
+
+    private static async uploadPoints(points: number): Promise<void>{
+        //upload Points jest wywoływane przy końcu gry
+        points //ilość zdobytych przez gracza punktów
+        //walnij tu kod. Żeby go skompilować, odpal terminal w VS i najpierw wejdź do foleru projektu ("cd projekt"), a następnie wpisz komendę "tsc". Powinno się poprawnie skompilować
     }
 }
 

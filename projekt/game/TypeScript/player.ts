@@ -2,16 +2,20 @@ import { HandleInput, InputHandler } from "./inputHandler.js";
 import { Globals } from "./globals.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
 import { Line } from "./line.js";
+import { Game } from "./game.js";
 
 export class Player implements HandleInput{
     
     private static line: number; //linia, na której znajduje się postać
     private static character: number; //DO WYBRANIA POSTACI, PLACEHOLDER
     private static character_image_source: string //PLACEHOLDER
+    private static level: string = "full" //gdzie postać oberwie efektem przeszkody. low - wślizg, high - skok, full - idzie i obrywa wszystkim co jest
 
     private static base_speed: number = 0.01 //bazowa prędkość biegu postaci
     private static speed_modifiers: number[] = []
     private static movement: number = 0 //przemieszczenie postaci
+
+
 
     private static html_handler: htmlElementHandler = new htmlElementHandler("player")
 
@@ -25,6 +29,9 @@ export class Player implements HandleInput{
             case "w":
             case "ArrowUp":
                 console.log("W")
+                Player.input_handler.turnOffUntil(
+                    Player.jump()
+                )
                 break;
             
             case "s":
@@ -62,18 +69,21 @@ export class Player implements HandleInput{
 
     public static gameStart(): void{
         Player.setLine(Line.getMiddleLine())
+        Player.setLevel("full")
         Player.setCharacter(Globals.character_initials)
+        
         Player.createSpeedModifier("incremental", 1, 5000, 0.1) // NIE DZIAŁA
     }
 
     public static async process(): Promise<void>{
-        Player.html_handler.moveTo(Player.line, 0)
+        //Player.html_handler.moveTo(Player.line, 0)
         Player.calculateMovement()
         //console.log(Player.getMovement())
     }
 
     public static setLine(line: number): void{
         Player.line = line
+        Player.html_handler.moveTo(Player.line, 0)
     }
 
     private static setCharacter(character_initials: string): void{
@@ -102,12 +112,22 @@ export class Player implements HandleInput{
         Player.movement = movement
     }
 
+    public static getLevel(): string{
+        return Player.level
+    }
+
+    public static death(): void{
+        Game.endGame()
+    }
+
     public static async createSpeedModifier(type: string, modifier: number, timeout_ms: number, change_for_timeout: number): Promise<void>{
         Player.speed_modifiers.push(modifier)
         setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms)
     }
 
     private static async changeSpeedModifierValue(type: string, modifier: number, timeout_ms: number, change_for_timeout: number): Promise<void>{
+        console.log(Player.speed_modifiers)
+
         if (modifier == 1){
             Player.deleteSpeedModifier(1)
             return
@@ -139,4 +159,26 @@ export class Player implements HandleInput{
         Player.speed_modifiers[i] = new_modifier
     }
 
+    private static setLevel(level: string): void{
+        Player.level = level
+    }
+
+    private static async jump(): Promise<void>{
+        let time_to_fly: number = 500
+        let time_to_fall: number = 500
+
+        Player.level = "high"
+
+        Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fly.toString() + "ms"
+        Player.html_handler.getHtmlElement().style.bottom = (Line.getBottomPositionAtDistance(0) + 200).toString() + "px"
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fly))
+
+        Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fall.toString() + "ms"
+        Player.html_handler.getHtmlElement().style.bottom = Line.getBottomPositionAtDistance(0).toString() + "px"
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
+
+        Player.level = "full"
+    }
 }

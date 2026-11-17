@@ -43,7 +43,7 @@ export class Obstacle{
         return this.distance + this.obstacle_data.getLength()
     }
 
-    public isPlayerOnObstacleLevel(): boolean{
+    public isPlayerOnObstacleDistance(): boolean{
         if(this.getDistanceFromPlayer() <= 0 && this.getEndDistanceFromPlayer() >= 0){
             return true
         }
@@ -98,13 +98,28 @@ export class Obstacle{
 
         this.activated = true
 
-        return
+        this.obstacle_data.activateEffect()
     }
 
     private checkForPlayer(): void{
-        if (this.isPlayerOnObstacleLevel() && this.line == Player.getLine()){
+        if (this.isPlayerOnObstacleDistance() && this.line == Player.getLine() && this.isPlayerOnObstacleLevel()){
             this.activateEffect()
         }
+    }
+
+    private isPlayerOnObstacleLevel(): boolean{
+        let obstacle_level = this.obstacle_data.getLevel()
+        let player_level = Player.getLevel()
+
+        if (obstacle_level == "full" || player_level == "full"){
+            return true
+        }
+
+        if (obstacle_level == player_level){
+            return true
+        }
+
+        return false
     }
 
     public static async spawnRandomRow(): Promise<void>{

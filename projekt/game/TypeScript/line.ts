@@ -11,7 +11,7 @@ export class Line{
         }
 
         let line_obstacles: Obstacle[] = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line)
-        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()))
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleDistance()))
         
         // jeżeli nie ma na linii przeszkody na poziomie gracza
         if(!(obstacle_on_player_level instanceof Obstacle)){
@@ -29,7 +29,7 @@ export class Line{
 
     public static getObstacleOnPlayerLevel(line: number): Obstacle | undefined{
         let line_obstacles: Obstacle[] = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line)
-        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()))
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleDistance()))
         return obstacle_on_player_level
     }
 

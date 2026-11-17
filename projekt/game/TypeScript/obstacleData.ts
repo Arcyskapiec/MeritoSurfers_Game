@@ -1,11 +1,13 @@
+import { Player } from "./player.js";
+
 export class ObstacleData{
     // WSZYSTKIE RODZAJE PRZESZKÓD
     public static obstacle_types: ObstacleData[] = [
-        new ObstacleData("obs1", "low", 1, 0.1, true),
-        new ObstacleData("obs2", "low", 1, 0.1, true),
-        new ObstacleData("obs3", "low", 1, 0.1, true),
-        new ObstacleData("obs4", "low", 1, 0.1, true),
-        new ObstacleData("obs5", "low", 1, 0.1, true)
+        new ObstacleData("obs1", "low", 1, 0.1, true, "death"),
+        new ObstacleData("obs2", "low", 1, 0.1, true, "death"),
+        new ObstacleData("obs3", "low", 1, 0.1, true, "death"),
+        new ObstacleData("obs4", "low", 1, 0.1, true, "death"),
+        new ObstacleData("obs5", "low", 1, 0.1, true, "death")
     ];
 
     private level: string; // gdzie postać oberwie efektem przeszkody. low - można nad tym przeskoczyć, high - można się pod tym prześlizgnąć, full - nie ma bata
@@ -13,15 +15,17 @@ export class ObstacleData{
     private length: number; // jak "długie" jest
     private name: string;
     private solid: boolean;
+    private effect: string;
    
     //private img;
 
-    constructor(name: string, level: string, width: number, length: number, solid: boolean){
+    constructor(name: string, level: string, width: number, length: number, solid: boolean, effect: string){
         this.width = width;
         this.length = length;
         this.name = name;
         this.solid = solid;
         this.level = level;
+        this.effect = effect;
     }
 
     public static findByName(name: string): ObstacleData{
@@ -43,5 +47,19 @@ export class ObstacleData{
 
     public getLevel(): string{
         return this.level
+    }
+
+    public activateEffect(){
+        switch (this.effect) {
+            case "death":
+                Player.death()
+                break;
+            
+            case "slow":
+                //DO ZROBIENIA
+                break
+            default:
+                break;
+        }
     }
 }
