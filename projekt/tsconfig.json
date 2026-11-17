@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "strict": true,
+
+        "target":"ES2022",
+
+        "rootDir": "./game/TypeScript",
+        "outDir": "./game/JavaScript"
+    },
+    "include": [
+        "./game/TypeScript/**/*.ts"
+    ]
+}
