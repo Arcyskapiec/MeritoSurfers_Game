@@ -1,6 +1,7 @@
 import { ObstacleData } from "./obstacleData.js";
 import { Player } from "./player.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
+import { Line } from "./line.js";
 export class Obstacle {
     static obstacles = [];
     html_handler;
@@ -16,6 +17,7 @@ export class Obstacle {
     }
     async process() {
         this.move();
+        this.checkForPlayer();
     }
     static async process() {
         Obstacle.obstacles.forEach(obstacle => {
@@ -62,7 +64,6 @@ export class Obstacle {
     }
     move() {
         this.distance -= Player.getMovement() * (1 - this.distance) + 0.01;
-        console.log(this.distance);
         if (this.distance <= -1) {
             this.delete();
             return;
@@ -73,6 +74,27 @@ export class Obstacle {
         if (this.activated) {
             return;
         }
+        this.activated = true;
         return;
+    }
+    checkForPlayer() {
+        if (this.isPlayerOnObstacleLevel() && this.line == Player.getLine()) {
+            this.activateEffect();
+        }
+    }
+    static async spawnRandomRow() {
+        let row = [];
+        for (let i = 0; i < Line.getLineAmount(); i++) {
+            row.push(ObstacleData.getRandomObstacleType());
+        }
+        //jeżeli nie ma przeszkody, której można uniknąć, zamień losową przeszkodę na losową inną
+        while (!(row.find(obstacle_data => obstacle_data.getLevel() != "full") instanceof ObstacleData)) {
+            let i = Math.floor(Math.random() * row.length);
+            row[i] = ObstacleData.getRandomObstacleType();
+        }
+        //spawn
+        for (let i = 0; i < row.length; i++) {
+            Obstacle.spawn(row[i], i);
+        }
     }
 }

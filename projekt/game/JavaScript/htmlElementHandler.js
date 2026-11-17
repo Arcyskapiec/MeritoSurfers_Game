@@ -7,7 +7,7 @@ export class htmlElementHandler {
         this.html_element = htmlElementHandler.createHtmlElement(class_name);
     }
     static createHtmlElement(class_name) {
-        var new_element = document.createElement("div");
+        let new_element = document.createElement("div");
         new_element.className = class_name;
         new_element.style.position = "absolute";
         Globals.game_window.appendChild(new_element);

@@ -40,4 +40,8 @@ export class ObstacleData{
         let i: number = Math.floor(Math.random() * ObstacleData.obstacle_types.length)
         return ObstacleData.obstacle_types[i]
     }
+
+    public getLevel(): string{
+        return this.level
+    }
 }

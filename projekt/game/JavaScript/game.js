@@ -12,7 +12,7 @@ class Game {
         Player.gameStart();
         Sound.setTrack("main-theme.wav");
         Game.startGameLoop();
-        Obstacle.spawnRandom(2);
+        Game.spawnObstacles();
     }
     static async gameLoop() {
         if (Game.game_loop_on == false) {
@@ -26,7 +26,7 @@ class Game {
         Game.stopGameLoop();
         Obstacle.deleteAllObstacles();
     }
-    static async startGameLoop() {
+    static startGameLoop() {
         if (Game.game_loop_on) {
             console.log("nie można rozpocząć pętli gry, gdyż ta jest już aktywna");
             return;
@@ -36,6 +36,15 @@ class Game {
     }
     static stopGameLoop() {
         Game.game_loop_on = false;
+    }
+    static async spawnObstacles() {
+        if (!Game.game_loop_on) {
+            return;
+        }
+        Obstacle.spawnRandomRow();
+        setTimeout(() => {
+            Game.spawnObstacles();
+        }, 2000);
     }
 }
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY

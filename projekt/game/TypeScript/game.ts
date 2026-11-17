@@ -14,10 +14,9 @@ abstract class Game{
 
         Player.gameStart()
         Sound.setTrack("main-theme.wav")
-
+        
         Game.startGameLoop()
-
-        Obstacle.spawnRandom(2)
+        Game.spawnObstacles()
     }
 
     private static async gameLoop(): Promise<void>{
@@ -36,7 +35,7 @@ abstract class Game{
         Obstacle.deleteAllObstacles()
     }
 
-    private static async startGameLoop(): Promise<void>{
+    private static startGameLoop(): void{
         if (Game.game_loop_on){
             console.log("nie można rozpocząć pętli gry, gdyż ta jest już aktywna")
             return;
@@ -49,6 +48,17 @@ abstract class Game{
 
     private static stopGameLoop(){
         Game.game_loop_on = false
+    }
+
+    private static async spawnObstacles(): Promise<void>{
+        if(!Game.game_loop_on){
+            return
+        }
+
+        Obstacle.spawnRandomRow()
+        setTimeout(() => {
+            Game.spawnObstacles()
+        }, 2000);
     }
 }
 

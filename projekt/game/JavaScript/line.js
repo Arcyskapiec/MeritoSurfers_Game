@@ -20,6 +20,11 @@ export class Line {
         }
         return true;
     }
+    static getObstacleOnPlayerLevel(line) {
+        let line_obstacles = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line);
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()));
+        return obstacle_on_player_level;
+    }
     static getRandomLine() {
         return Math.floor(Math.random() * Line.line_amount);
     }
@@ -28,33 +33,35 @@ export class Line {
     }
     static getWidthAtDistance(distance) {
         if (distance >= 0) {
-            var offset = Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height));
-            var max = Globals.getGameWindowWidth() - offset;
-            var min = Globals.getGameWindowWidth() * Globals.horizon_width;
-            var dif = max - min;
-            var width = (min + dif * (1 - distance)) / Line.line_amount;
+            let offset = Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height));
+            let max = Globals.getGameWindowWidth() - offset;
+            let min = Globals.getGameWindowWidth() * Globals.horizon_width;
+            let dif = max - min;
+            let width = (min + dif * (1 - distance)) / Line.line_amount;
             return width;
         }
         return 0; //DO ZROBIENIA
     }
     static getBottomPositionAtDistance(distance) {
         if (distance >= 0) {
-            var max = Globals.getGameWindowHeight() * (1 - Globals.horizon_height);
-            var min = Globals.getGameWindowHeight() * (1 - Globals.player_position);
-            var dif = max - min;
-            var bottom = (min + dif * distance);
+            let max = Globals.getGameWindowHeight() * (1 - Globals.horizon_height);
+            let min = Globals.getGameWindowHeight() * (1 - Globals.player_position);
+            let dif = max - min;
+            let bottom = (min + dif * distance);
             return bottom;
         }
         return 0; //DO ZROBIENIA
     }
     static getLeftPositionAtDistance(line, distance) {
         if (distance >= 0) {
-            var offset = Globals.getGameWindowWidth();
-            var max = (Globals.getGameWindowWidth() * (1 - Globals.horizon_width)) / 2;
-            var min = (Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))) / 2;
-            var dif = max - min;
+            let max = (Globals.getGameWindowWidth() * (1 - Globals.horizon_width)) / 2;
+            let min = (Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))) / 2;
+            let dif = max - min;
             return min + dif * distance + line * Line.getWidthAtDistance(distance);
         }
         return 0; //DO ZROBIENIA 
+    }
+    static getLineAmount() {
+        return Line.line_amount;
     }
 }

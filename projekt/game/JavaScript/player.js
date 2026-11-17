@@ -6,8 +6,9 @@ export class Player {
     static line; //linia, na której znajduje się postać
     static character; //DO WYBRANIA POSTACI, PLACEHOLDER
     static character_image_source; //PLACEHOLDER
-    static base_speed = 3000; //prędkość biegu postaci. Ilość milisekund, jakich potrzebuje by dobiec do nowej przeszkody (albo to, ile czasu przeszkoda potrzebuje, by dotrzeć do gracza xP)
-    static movement = 0.01; //przemieszczenie postaci
+    static base_speed = 0.01; //bazowa prędkość biegu postaci
+    static speed_modifiers = [];
+    static movement = 0; //przemieszczenie postaci
     static html_handler = new htmlElementHandler("player");
     //DLA INPUT HANDLER'A
     html_element = Player.html_handler.getHtmlElement();
@@ -45,9 +46,12 @@ export class Player {
     static gameStart() {
         Player.setLine(Line.getMiddleLine());
         Player.setCharacter(Globals.character_initials);
+        Player.createSpeedModifier("incremental", 1, 5000, 0.1); // NIE DZIAŁA
     }
     static async process() {
         Player.html_handler.moveTo(Player.line, 0);
+        Player.calculateMovement();
+        //console.log(Player.getMovement())
     }
     static setLine(line) {
         Player.line = line;
@@ -60,5 +64,46 @@ export class Player {
     }
     static async moveTo(line) {
         Player.setLine(line);
+    }
+    static getLine() {
+        return Player.line;
+    }
+    static calculateMovement() {
+        let movement = Player.base_speed;
+        Player.speed_modifiers.forEach(modifier => {
+            movement * modifier;
+        });
+        Player.movement = movement;
+    }
+    static async createSpeedModifier(type, modifier, timeout_ms, change_for_timeout) {
+        Player.speed_modifiers.push(modifier);
+        setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms);
+    }
+    static async changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout) {
+        if (modifier == 1) {
+            Player.deleteSpeedModifier(1);
+            return;
+        }
+        switch (type) {
+            case "incremental":
+                Player.updateSpeedModifierValue(modifier, modifier + change_for_timeout);
+                modifier += change_for_timeout;
+                break;
+            case "decremental":
+                Player.updateSpeedModifierValue(modifier, modifier - change_for_timeout);
+                modifier -= change_for_timeout;
+                break;
+            default:
+                break;
+        }
+        setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms);
+    }
+    static deleteSpeedModifier(modifier_to_delete) {
+        let i = Player.speed_modifiers.findIndex((modifier) => modifier == modifier_to_delete);
+        Player.speed_modifiers.splice(i, 1);
+    }
+    static updateSpeedModifierValue(old_modifier, new_modifier) {
+        let i = Player.speed_modifiers.findIndex((modifier) => modifier == old_modifier);
+        Player.speed_modifiers[i] = new_modifier;
     }
 }

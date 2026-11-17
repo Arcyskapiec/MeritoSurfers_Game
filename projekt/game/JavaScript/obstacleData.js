@@ -33,4 +33,7 @@ export class ObstacleData {
         let i = Math.floor(Math.random() * ObstacleData.obstacle_types.length);
         return ObstacleData.obstacle_types[i];
     }
+    getLevel() {
+        return this.level;
+    }
 }

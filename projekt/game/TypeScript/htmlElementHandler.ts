@@ -11,7 +11,7 @@ export class htmlElementHandler{
     }    
 
     private static createHtmlElement(class_name: string): HTMLElement{
-        var new_element: HTMLElement = document.createElement("div")
+        let new_element: HTMLElement = document.createElement("div")
         new_element.className = class_name
         new_element.style.position = "absolute"
         Globals.game_window.appendChild(new_element)

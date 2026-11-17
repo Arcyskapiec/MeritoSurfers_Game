@@ -27,6 +27,12 @@ export class Line{
         return true
     }
 
+    public static getObstacleOnPlayerLevel(line: number): Obstacle | undefined{
+        let line_obstacles: Obstacle[] = Obstacle.getObstacles().filter((obstacle) => obstacle.getLine() === line)
+        let obstacle_on_player_level = line_obstacles.find((obstacle) => (obstacle.isPlayerOnObstacleLevel()))
+        return obstacle_on_player_level
+    }
+
     public static getRandomLine(): number{
         return Math.floor(Math.random() * Line.line_amount)
     }
@@ -37,11 +43,11 @@ export class Line{
 
     public static getWidthAtDistance(distance: number): number{
         if(distance >= 0){
-            var offset: number = Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))
-            var max: number = Globals.getGameWindowWidth() - offset
-            var min: number = Globals.getGameWindowWidth() * Globals.horizon_width
-            var dif: number = max - min
-            var width: number = (min + dif * (1 - distance)) / Line.line_amount
+            let offset: number = Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))
+            let max: number = Globals.getGameWindowWidth() - offset
+            let min: number = Globals.getGameWindowWidth() * Globals.horizon_width
+            let dif: number = max - min
+            let width: number = (min + dif * (1 - distance)) / Line.line_amount
 
             return width
         }
@@ -51,10 +57,10 @@ export class Line{
 
     public static getBottomPositionAtDistance(distance : number): number{
         if(distance >= 0){
-            var max: number = Globals.getGameWindowHeight() * (1 - Globals.horizon_height)
-            var min: number = Globals.getGameWindowHeight() * (1 - Globals.player_position)
-            var dif: number = max - min
-            var bottom: number = (min + dif * distance)
+            let max: number = Globals.getGameWindowHeight() * (1 - Globals.horizon_height)
+            let min: number = Globals.getGameWindowHeight() * (1 - Globals.player_position)
+            let dif: number = max - min
+            let bottom: number = (min + dif * distance)
 
             return bottom
         }
@@ -64,13 +70,16 @@ export class Line{
 
     public static getLeftPositionAtDistance(line: number, distance: number): number{
         if(distance >= 0){
-            var offset: number = Globals.getGameWindowWidth()
-            var max: number = (Globals.getGameWindowWidth() * (1 - Globals.horizon_width)) / 2;
-            var min: number = (Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))) / 2;
-            var dif: number = max - min
+            let max: number = (Globals.getGameWindowWidth() * (1 - Globals.horizon_width)) / 2;
+            let min: number = (Globals.getGameWindowWidth() * ((1 - Globals.player_position) * (1 - Globals.horizon_height))) / 2;
+            let dif: number = max - min
             return min + dif * distance + line * Line.getWidthAtDistance(distance)
         }
 
         return 0; //DO ZROBIENIA 
+    }
+
+    public static getLineAmount(): number{
+        return Line.line_amount
     }
 }

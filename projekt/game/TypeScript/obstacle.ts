@@ -1,6 +1,7 @@
 import { ObstacleData } from "./obstacleData.js";
 import { Player } from "./player.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
+import { Line } from "./line.js";
 
 export class Obstacle{
     private static obstacles: Obstacle[] = []
@@ -11,7 +12,7 @@ export class Obstacle{
     private obstacle_data: ObstacleData;
     private activated: boolean = false
 
-    public constructor(obstacle_type: ObstacleData, line: number){
+    private constructor(obstacle_type: ObstacleData, line: number){
         this.line = line
         this.obstacle_data = obstacle_type
         this.html_handler = new htmlElementHandler("obstacle")
@@ -20,6 +21,8 @@ export class Obstacle{
 
     private async process(): Promise<void>{
         this.move()
+
+        this.checkForPlayer()
     }
 
     public static async process(): Promise<void>{
@@ -73,13 +76,12 @@ export class Obstacle{
         Obstacle.spawn(ObstacleData.findByName(obstacle_type), line) 
     }
 
-    public static spawn(obstacle_type: ObstacleData, line: number){
+    public static spawn(obstacle_type: ObstacleData, line: number): void{
         Obstacle.obstacles.push(new Obstacle(obstacle_type, line))
     }
 
     private move(): void {
         this.distance -= Player.getMovement() * (1 - this.distance) + 0.01
-        console.log(this.distance)
 
         if (this.distance <= -1){
             this.delete()
@@ -93,7 +95,38 @@ export class Obstacle{
         if (this.activated){
             return
         }
-        
+
+        this.activated = true
+
         return
+    }
+
+    private checkForPlayer(): void{
+        if (this.isPlayerOnObstacleLevel() && this.line == Player.getLine()){
+            this.activateEffect()
+        }
+    }
+
+    public static async spawnRandomRow(): Promise<void>{
+        let row: ObstacleData[] = []
+        
+        for (let i = 0; i < Line.getLineAmount(); i++) {
+            row.push(ObstacleData.getRandomObstacleType())
+        }
+
+        //jeżeli nie ma przeszkody, której można uniknąć, zamień losową przeszkodę na losową inną
+        while(
+            !(row.find(
+                obstacle_data => obstacle_data.getLevel() != "full"
+            ) instanceof ObstacleData)
+        ){
+            let i = Math.floor(Math.random() * row.length)
+            row[i] = ObstacleData.getRandomObstacleType()
+        }
+
+        //spawn
+        for (let i = 0; i < row.length; i++) {
+            Obstacle.spawn(row[i], i)
+        }
     }
 }
