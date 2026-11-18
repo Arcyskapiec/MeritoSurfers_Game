@@ -3,6 +3,7 @@ import { Globals } from "./globals.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
 import { Line } from "./line.js";
 import { Game } from "./game.js";
+import { Sound } from "./sound.js";
 //JD edit
 import { Animation } from "./animation.js";
 //JD edit
@@ -18,14 +19,15 @@ export class Player implements HandleInput{
     private static speed_modifiers: number[] = []
     private static movement: number = 0 //przemieszczenie postaci
 
-
+    private static sfx_jumps: string[] = ["jumps/jump1.wav", "jumps/jump2.wav", "jumps/jump3.wav", "jumps/jump4.wav"]
+    private static sfx_footsteps: Sound = new Sound("running.wav", true)
 
     private static html_handler: htmlElementHandler = new htmlElementHandler("player")
 
     //DLA INPUT HANDLER'A
     public html_element: HTMLElement = Player.html_handler.getHtmlElement()
     private static handled_inputs: string[] = ["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
-    private static input_handler: InputHandler = new InputHandler(new Player(), Player.handled_inputs)
+    private static input_handler: InputHandler// = new InputHandler(new Player(), Player.handled_inputs)
 
     public handleInput(input: string): void {
         switch (input) {
@@ -34,12 +36,13 @@ export class Player implements HandleInput{
                 console.log("W")
                 Player.input_handler.turnOffUntil(
                     Player.jump()
-                )
+                ).then(() => Player.removeKeyboardHandlerIfGameLoopOff())
                 break;
             
             case "s":
             case "ArrowDown":
                 console.log("S")
+                // DO ZROBIENIA
                 break;
 
             case "a":
@@ -48,7 +51,7 @@ export class Player implements HandleInput{
                 if(Line.canBeEntered(Player.line - 1)){
                     Player.input_handler.turnOffUntil(
                         Player.moveTo(Player.line - 1)
-                    )
+                    ).then(() => Player.removeKeyboardHandlerIfGameLoopOff())
                 }
 
                 break;
@@ -59,7 +62,7 @@ export class Player implements HandleInput{
                 if(Line.canBeEntered(Player.line + 1)){
                     Player.input_handler.turnOffUntil(
                         Player.moveTo(Player.line + 1)
-                    )
+                    ).then(() => Player.removeKeyboardHandlerIfGameLoopOff())
                 }
 
                 break;
@@ -71,22 +74,38 @@ export class Player implements HandleInput{
     //KONIEC RZECZY DLA INPUT HANDLERA
 
     public static gameStart(): void{
+        Player.input_handler = new InputHandler(new Player(), Player.handled_inputs)
+
         Player.setLine(Line.getMiddleLine())
         Player.setLevel("full")
         Player.setCharacter(Globals.character_initials)
+
+        Player.sfx_footsteps.setVolume(1)
+        Player.sfx_footsteps.start()
         
         Player.createSpeedModifier("incremental", 1, 5000, 0.1) // NIE DZIAŁA
     }
 
     public static async process(): Promise<void>{
-        //Player.html_handler.moveTo(Player.line, 0)
         Player.calculateMovement()
-        //console.log(Player.getMovement())
     }
 
-    public static setLine(line: number): void{
+    public static gameEnd(): void{
+        Player.input_handler.delete()
+        Player.sfx_footsteps.stop()
+    }
+
+    public static async setLine(line: number): Promise<void>{
+        let time_to_switch: number = 200
+
+        Player.html_handler.getHtmlElement().style.transition = "left " + time_to_switch.toString() + "ms"
+        Player.html_handler.moveTo(line, 0)
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_switch / 2))
+
         Player.line = line
-        Player.html_handler.moveTo(Player.line, 0)
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_switch / 2))
     }
 
     private static setCharacter(character_initials: string): void{
@@ -101,7 +120,7 @@ export class Player implements HandleInput{
     }
 
     private static async moveTo(line: number): Promise<void>{
-        Player.setLine(line)
+        await Player.setLine(line)
     }
 
     public static getLine(): number{
@@ -184,26 +203,43 @@ export class Player implements HandleInput{
         Animation.pauseAnimation()
         //JD edit
 
-        Player.level = "high"
-
+        Player.muteFootSteps()
+        Sound.playRandom(Player.sfx_jumps)
+        
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fly.toString() + "ms"
         Player.html_handler.getHtmlElement().style.bottom = (Line.getBottomPositionAtDistance(0) + 200).toString() + "px"
 
-        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fly))
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fly / 2))
+        Player.level = "high"
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fly / 2))
 
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fall.toString() + "ms"
         Player.html_handler.getHtmlElement().style.bottom = Line.getBottomPositionAtDistance(0).toString() + "px"
 
-        //JD edit
-        // await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
-        
-        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall - resume_offset))
-        Animation.resumeAnimation()
-
-        await new Promise<void>((resolve) => setTimeout(resolve, resume_offset))
-        //JD edit
-
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall / 2))
         Player.level = "full"
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall / 2 - resume_offset))
+        Animation.resumeAnimation()
+        await new Promise<void>((resolve) => setTimeout(resolve, resume_offset))
 
+        Player.unmuteFootSteps()
+    }
+
+    private static removeKeyboardHandlerIfGameLoopOff(): void{
+        if (!Game.isGameLoopOn()){
+            Player.input_handler.delete()
+        }
+    }
+
+    private static unmuteFootSteps(): void{
+        if (!Game.isGameLoopOn()){
+            Player.sfx_footsteps.stop()
+            return
+        }
+        Player.sfx_footsteps.setVolume(1)
+    }
+
+    private static muteFootSteps(): void{
+        Player.sfx_footsteps.setVolume(0)
     }
 }
