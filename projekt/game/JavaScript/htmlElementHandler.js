@@ -25,6 +25,13 @@ export class htmlElementHandler {
         this.html_element.style.width = Line.getWidthAtDistance(distance).toString() + "px";
         this.html_element.style.left = Line.getLeftPositionAtDistance(line, distance).toString() + "px";
         this.html_element.style.bottom = Line.getBottomPositionAtDistance(distance).toString() + "px";
+        this.html_element.style.zIndex = Math.floor(distance * -100 + 100).toString();
+        if (distance > 0.8) {
+            this.html_element.style.opacity = ((1 - distance) * 5).toString();
+        }
+        else {
+            this.html_element.style.opacity = "1";
+        }
     }
     getHtmlElement() {
         return this.html_element;
