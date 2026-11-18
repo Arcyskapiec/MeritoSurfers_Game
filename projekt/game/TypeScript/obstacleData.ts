@@ -13,9 +13,9 @@ export class ObstacleData{
     private level: string; // gdzie postać oberwie efektem przeszkody. low - można nad tym przeskoczyć, high - można się pod tym prześlizgnąć, full - nie ma bata
     private width: number; // ile linii zajmuje
     private length: number; // jak "długie" jest
-    private name: string;
-    private solid: boolean;
-    private effect: string;
+    private name: string; //po nazwie będzie szukać pliku graficznego
+    private solid: boolean; //czy przeszkoda blokuje linię
+    private effect: string; //death lub slow, SLOW DO ZROBIENIA
    
     //private img;
 

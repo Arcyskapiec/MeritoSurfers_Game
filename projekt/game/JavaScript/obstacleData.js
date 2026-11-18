@@ -11,9 +11,9 @@ export class ObstacleData {
     level; // gdzie postać oberwie efektem przeszkody. low - można nad tym przeskoczyć, high - można się pod tym prześlizgnąć, full - nie ma bata
     width; // ile linii zajmuje
     length; // jak "długie" jest
-    name;
-    solid;
-    effect;
+    name; //po nazwie będzie szukać pliku graficznego
+    solid; //czy przeszkoda blokuje linię
+    effect; //death lub slow, SLOW DO ZROBIENIA
     //private img;
     constructor(name, level, width, length, solid, effect) {
         this.width = width;
