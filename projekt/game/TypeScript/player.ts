@@ -85,6 +85,7 @@ export class Player implements HandleInput{
         Player.sfx_footsteps.setVolume(1)
         Player.sfx_footsteps.start()
         
+        Player.deleteAllSpeedModifiers()
         Player.createSpeedModifier("incremental", 1, 5000, 0.05)
     }
 
@@ -94,6 +95,7 @@ export class Player implements HandleInput{
 
     public static gameEnd(): void{
         Player.input_handler.delete()
+        Player.deleteAllSpeedModifiers()
         Player.sfx_footsteps.stop()
     }
 
@@ -160,7 +162,11 @@ export class Player implements HandleInput{
         setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms)
     }
 
-    private static async changeSpeedModifierValue(type: string, modifier: number, timeout_ms: number, change_for_timeout: number): Promise<void>{
+    private static async changeSpeedModifierValue(type: string, modifier: number, timeout_ms: number, change_for_timeout: number): Promise<void>{        
+        if(Player.speed_modifiers.findIndex((active_modifier) => active_modifier == modifier) == -1){
+            return
+        }
+
         console.log("speed modifiers: " + Player.speed_modifiers.toString())
 
         switch (type) {
@@ -191,6 +197,10 @@ export class Player implements HandleInput{
     private static updateSpeedModifierValue(old_modifier: number, new_modifier: number): void{
         let i: number = Player.speed_modifiers.findIndex((modifier) => modifier == old_modifier)
         Player.speed_modifiers[i] = new_modifier
+    }
+
+    private static deleteAllSpeedModifiers(): void{
+        Player.speed_modifiers = []
     }
 
     private static setLevel(level: string): void{
