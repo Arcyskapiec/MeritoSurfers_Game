@@ -91,6 +91,17 @@ export class Game{
     }
 
     private static async uploadPoints(points: number): Promise<void>{
+        const res = await fetch("http://localhost:80/post/upload_points", 
+        {
+            method: "POST",
+            headers:
+            {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({points: points})
+        });
+
+        console.log(res);
         //upload Points jest wywoływane przy końcu gry
         points //ilość zdobytych przez gracza punktów
         //walnij tu kod. Żeby go skompilować, odpal terminal w VS i najpierw wejdź do foleru projektu ("cd projekt"), a następnie wpisz komendę "tsc". Powinno się poprawnie skompilować

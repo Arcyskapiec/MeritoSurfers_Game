@@ -153,7 +153,8 @@ export class Player {
         //JD edit
         Animation.pauseAnimation();
         //JD edit
-        Player.level = "high";
+        Player.muteFootSteps();
+        Sound.playRandom(Player.sfx_jumps);
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fly.toString() + "ms";
         Player.html_handler.getHtmlElement().style.bottom = (Line.getBottomPositionAtDistance(0) + 200).toString() + "px";
         await new Promise((resolve) => setTimeout(resolve, time_to_fly / 2));
@@ -161,14 +162,11 @@ export class Player {
         await new Promise((resolve) => setTimeout(resolve, time_to_fly / 2));
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fall.toString() + "ms";
         Player.html_handler.getHtmlElement().style.bottom = Line.getBottomPositionAtDistance(0).toString() + "px";
-        //JD edit
-        // await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
-        await new Promise((resolve) => setTimeout(resolve, time_to_fall - resume_offset));
+        await new Promise((resolve) => setTimeout(resolve, time_to_fall / 2));
+        Player.level = "full";
+        await new Promise((resolve) => setTimeout(resolve, time_to_fall / 2 - resume_offset));
         Animation.resumeAnimation();
         await new Promise((resolve) => setTimeout(resolve, resume_offset));
-        //JD edit
-        Player.level = "full";
-        await new Promise((resolve) => setTimeout(resolve, time_to_fall / 2));
         Player.unmuteFootSteps();
     }
     static removeKeyboardHandlerIfGameLoopOff() {
