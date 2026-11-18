@@ -42,11 +42,4 @@ export class htmlElementHandler {
         let i = htmlElementHandler.html_element_handlers.indexOf(this);
         htmlElementHandler.html_element_handlers.splice(i, 1);
     }
-    static deleteAllByClass(class_name) {
-        htmlElementHandler.html_element_handlers.forEach(handler => {
-            if (handler.html_element.className == class_name) {
-                handler.delete();
-            }
-        });
-    }
 }
