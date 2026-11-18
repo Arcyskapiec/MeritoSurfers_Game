@@ -42,6 +42,7 @@ export class Game{
 
         Obstacle.deleteAllObstacles()
 
+
     }
 
     private static startGameLoop(): void{
@@ -92,4 +93,5 @@ export class Game{
 
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY
 let start_game_button: HTMLButtonElement = document.getElementById("btn_game_start") as HTMLButtonElement
+
 start_game_button.addEventListener("click", Game.startGame)

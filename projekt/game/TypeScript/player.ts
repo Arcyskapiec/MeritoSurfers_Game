@@ -3,6 +3,9 @@ import { Globals } from "./globals.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
 import { Line } from "./line.js";
 import { Game } from "./game.js";
+//JD edit
+import { Animation } from "./animation.js";
+//JD edit
 
 export class Player implements HandleInput{
     
@@ -87,7 +90,10 @@ export class Player implements HandleInput{
     }
 
     private static setCharacter(character_initials: string): void{
-        Player.html_handler.setImage("characters/" + character_initials + "/tmp_character.png")
+        //JD edit
+        // Player.html_handler.setImage("characters/" + character_initials + "/tmp_character.png")
+        Animation.startRunAnimation(Player.html_handler, character_initials)
+        //JD edit
     }
 
     public static getMovement(): number{
@@ -117,6 +123,9 @@ export class Player implements HandleInput{
     }
 
     public static death(): void{
+        //JD edit
+        Animation.stopAnimation()
+        //JD edit
         Game.endGame()
     }
 
@@ -166,6 +175,14 @@ export class Player implements HandleInput{
     private static async jump(): Promise<void>{
         let time_to_fly: number = 500
         let time_to_fall: number = 500
+        //JD edit
+        // wznawia animacje biegu chwile przed końcem timeoutu
+        let resume_offset: number = 120
+        //JD edit
+
+        //JD edit
+        Animation.pauseAnimation()
+        //JD edit
 
         Player.level = "high"
 
@@ -177,8 +194,16 @@ export class Player implements HandleInput{
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fall.toString() + "ms"
         Player.html_handler.getHtmlElement().style.bottom = Line.getBottomPositionAtDistance(0).toString() + "px"
 
-        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
+        //JD edit
+        // await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
+        
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall - resume_offset))
+        Animation.resumeAnimation()
+
+        await new Promise<void>((resolve) => setTimeout(resolve, resume_offset))
+        //JD edit
 
         Player.level = "full"
+
     }
 }
