@@ -348,11 +348,6 @@ button {
     background: #b6e8fb;
 }
 
-.player {
-    width: 120px;
-    height: min(44vh, 360px) !important;
-}
-
 @media (min-height: 760px) {
     .game-shell {
         padding-top: 34px;
