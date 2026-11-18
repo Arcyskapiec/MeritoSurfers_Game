@@ -7,7 +7,7 @@ export class Globals {
     //JD edit
     // SKALOWANIE OKNA GRY ORAZ JEJ ELEMENTÓW 0 0 - górny lewy róg okna, 1 1 - dolny prawy róg okna. czyli 1 to długość całego okna
     static horizon_height = 0.2;
-    static horizon_width = 0.3;
+    static horizon_width = 0.1;
     static player_position = 0.9;
     static monster_position = 0.95;
     static frame_elapse_time_ms = 1000 / Globals.frames_per_second;

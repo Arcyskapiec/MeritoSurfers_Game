@@ -15,7 +15,7 @@ export class Player implements HandleInput{
     private static character_image_source: string //PLACEHOLDER
     private static level: string = "full" //gdzie postać oberwie efektem przeszkody. low - wślizg, high - skok, full - idzie i obrywa wszystkim co jest
 
-    private static base_speed: number = 0.01 //bazowa prędkość biegu postaci
+    private static base_speed: number = 1 //bazowa prędkość biegu postaci. Próbowałem, żeby to było z czymś związane, ale nie wyszło. Wartość czysto arbitralna XDDD
     private static speed_modifiers: number[] = []
     private static movement: number = 0 //przemieszczenie postaci
 
@@ -42,7 +42,9 @@ export class Player implements HandleInput{
             case "s":
             case "ArrowDown":
                 console.log("S")
-                // DO ZROBIENIA
+                Player.input_handler.turnOffUntil(
+                    Player.slide()
+                ).then(() => Player.removeKeyboardHandlerIfGameLoopOff())
                 break;
 
             case "a":
@@ -83,7 +85,7 @@ export class Player implements HandleInput{
         Player.sfx_footsteps.setVolume(1)
         Player.sfx_footsteps.start()
         
-        Player.createSpeedModifier("incremental", 1, 5000, 0.1) // NIE DZIAŁA
+        Player.createSpeedModifier("incremental", 1, 5000, 0.05)
     }
 
     public static async process(): Promise<void>{
@@ -128,13 +130,18 @@ export class Player implements HandleInput{
     }
 
     private static calculateMovement(){
-        let movement = Player.base_speed
+        let movement = Player.base_speed / Globals.getFramesPerSecond()
 
         Player.speed_modifiers.forEach(modifier => {
-            movement * modifier
+            movement = movement * modifier
         });
 
+        if( movement > Player.base_speed / Globals.getFramesPerSecond() * 2){
+            movement = Player.base_speed / Globals.getFramesPerSecond() * 2
+        }
+
         Player.movement = movement
+        Game.updateRanDistance(movement)
     }
 
     public static getLevel(): string{
@@ -154,21 +161,20 @@ export class Player implements HandleInput{
     }
 
     private static async changeSpeedModifierValue(type: string, modifier: number, timeout_ms: number, change_for_timeout: number): Promise<void>{
-        console.log(Player.speed_modifiers)
-
-        if (modifier == 1){
-            Player.deleteSpeedModifier(1)
-            return
-        }
+        console.log("speed modifiers: " + Player.speed_modifiers.toString())
 
         switch (type) {
             case "incremental":
                 Player.updateSpeedModifierValue(modifier, modifier + change_for_timeout)
                 modifier += change_for_timeout
                 break;
-            case "decremental":
-                Player.updateSpeedModifierValue(modifier, modifier - change_for_timeout)
-                modifier -= change_for_timeout
+            case "slow":
+                if (modifier >= 1){
+                    Player.deleteSpeedModifier(modifier)
+                    return
+                }
+                Player.updateSpeedModifierValue(modifier, modifier + change_for_timeout)
+                modifier += change_for_timeout
                 break;
             default:
                 break;
@@ -225,6 +231,23 @@ export class Player implements HandleInput{
         Player.unmuteFootSteps()
     }
 
+    private static async slide(): Promise<void>{
+        let time_to_get_down: number = 500
+        let time_to_get_up: number = 500
+
+        Player.muteFootSteps()
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_down / 2))
+        Player.level = "low"
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_down / 2))
+
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_up / 2))
+        Player.level = "low"
+        await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_up / 2))
+
+        Player.unmuteFootSteps()
+    }
+
     private static removeKeyboardHandlerIfGameLoopOff(): void{
         if (!Game.isGameLoopOn()){
             Player.input_handler.delete()
@@ -241,5 +264,9 @@ export class Player implements HandleInput{
 
     private static muteFootSteps(): void{
         Player.sfx_footsteps.setVolume(0)
+    }
+
+    public static slow(modifier: number){
+        Player.createSpeedModifier("slow", modifier, 100, (1 - modifier) / 10)
     }
 }
