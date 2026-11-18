@@ -3,6 +3,9 @@ import { Globals } from "./globals.js";
 import { htmlElementHandler } from "./htmlElementHandler.js";
 import { Line } from "./line.js";
 import { Game } from "./game.js";
+//JD edit
+import { Animation } from "./animation.js";
+//JD edit
 export class Player {
     static line; //linia, na której znajduje się postać
     static character; //DO WYBRANIA POSTACI, PLACEHOLDER
@@ -62,7 +65,10 @@ export class Player {
         Player.html_handler.moveTo(Player.line, 0);
     }
     static setCharacter(character_initials) {
-        Player.html_handler.setImage("characters/" + character_initials + "/tmp_character.png");
+        //JD edit
+        // Player.html_handler.setImage("characters/" + character_initials + "/tmp_character.png")
+        Animation.startRunAnimation(Player.html_handler, character_initials);
+        //JD edit
     }
     static getMovement() {
         return Player.movement;
@@ -84,6 +90,9 @@ export class Player {
         return Player.level;
     }
     static death() {
+        //JD edit
+        Animation.stopAnimation();
+        //JD edit
         Game.endGame();
     }
     static async createSpeedModifier(type, modifier, timeout_ms, change_for_timeout) {
@@ -124,13 +133,25 @@ export class Player {
     static async jump() {
         let time_to_fly = 500;
         let time_to_fall = 500;
+        //JD edit
+        // wznawia animacje biegu chwile przed końcem timeoutu
+        let resume_offset = 120;
+        //JD edit
+        //JD edit
+        Animation.pauseAnimation();
+        //JD edit
         Player.level = "high";
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fly.toString() + "ms";
         Player.html_handler.getHtmlElement().style.bottom = (Line.getBottomPositionAtDistance(0) + 200).toString() + "px";
         await new Promise((resolve) => setTimeout(resolve, time_to_fly));
         Player.html_handler.getHtmlElement().style.transition = "bottom " + time_to_fall.toString() + "ms";
         Player.html_handler.getHtmlElement().style.bottom = Line.getBottomPositionAtDistance(0).toString() + "px";
-        await new Promise((resolve) => setTimeout(resolve, time_to_fall));
+        //JD edit
+        // await new Promise<void>((resolve) => setTimeout(resolve, time_to_fall))
+        await new Promise((resolve) => setTimeout(resolve, time_to_fall - resume_offset));
+        Animation.resumeAnimation();
+        await new Promise((resolve) => setTimeout(resolve, resume_offset));
+        //JD edit
         Player.level = "full";
     }
 }

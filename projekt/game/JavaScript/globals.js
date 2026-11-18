@@ -2,6 +2,9 @@ export class Globals {
     static frames_per_second = 60; //w tyle klatek na sekundę będzie gra celowała
     static game_window = document.getElementById("game_window");
     static character_initials = "AS"; //inicjały osoby, używane przy szukaniu ścieżki do grafiki po folderze z inicjałami, "AS" JAKO PLACEHOLDER
+    //JD edit
+    static player_nickname = "";
+    //JD edit
     // SKALOWANIE OKNA GRY ORAZ JEJ ELEMENTÓW 0 0 - górny lewy róg okna, 1 1 - dolny prawy róg okna. czyli 1 to długość całego okna
     static horizon_height = 0.2;
     static horizon_width = 0.3;

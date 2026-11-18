@@ -2,6 +2,9 @@ import { Globals } from "./globals.js"
 import { Player } from "./player.js"
 import { Obstacle } from "./obstacle.js"
 import { Sound } from "./sound.js"
+//JD edit
+import { Menu } from "./menu.js"
+//JD edit
 
 export class Game{
     private static game_loop_on: boolean = false
@@ -41,6 +44,10 @@ export class Game{
         Sound.stopTrack()
 
         Obstacle.deleteAllObstacles()
+
+        //JD edit
+        Menu.show()
+        //JD edit
 
     }
 
@@ -92,4 +99,8 @@ export class Game{
 
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY
 let start_game_button: HTMLButtonElement = document.getElementById("btn_game_start") as HTMLButtonElement
-start_game_button.addEventListener("click", Game.startGame)
+
+//JD edit
+// start_game_button.addEventListener("click", Game.startGame)
+Menu.init()
+//JD edit
