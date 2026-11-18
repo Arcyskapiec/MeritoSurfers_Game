@@ -176,6 +176,8 @@ export class Player {
     static async slide() {
         let time_to_get_down = 500;
         let time_to_get_up = 500;
+        Animation.pauseAnimation();
+        Player.html_handler.setImage("characters/" + Globals.character_initials + "/" + Globals.character_initials + "_duck.png");
         Player.muteFootSteps();
         await new Promise((resolve) => setTimeout(resolve, time_to_get_down / 2));
         Player.level = "low";
@@ -183,6 +185,7 @@ export class Player {
         await new Promise((resolve) => setTimeout(resolve, time_to_get_up / 2));
         Player.level = "low";
         await new Promise((resolve) => setTimeout(resolve, time_to_get_up / 2));
+        Animation.resumeAnimation();
         Player.unmuteFootSteps();
     }
     static removeKeyboardHandlerIfGameLoopOff() {

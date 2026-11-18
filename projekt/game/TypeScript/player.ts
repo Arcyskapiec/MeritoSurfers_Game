@@ -235,6 +235,8 @@ export class Player implements HandleInput{
         let time_to_get_down: number = 500
         let time_to_get_up: number = 500
 
+        Animation.pauseAnimation()
+        Player.html_handler.setImage("characters/" + Globals.character_initials + "/" + Globals.character_initials + "_duck.png")
         Player.muteFootSteps()
 
         await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_down / 2))
@@ -245,6 +247,7 @@ export class Player implements HandleInput{
         Player.level = "low"
         await new Promise<void>((resolve) => setTimeout(resolve, time_to_get_up / 2))
 
+        Animation.resumeAnimation()
         Player.unmuteFootSteps()
     }
 
