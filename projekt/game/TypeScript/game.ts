@@ -93,21 +93,3 @@ export class Game{
 //DO EDYCJI NA JAKIKOLWIEK PRZYCISK, CO BY OBSŁUGIWAŁ ODPALENIE GRY
 let start_game_button: HTMLButtonElement = document.getElementById("btn_game_start") as HTMLButtonElement
 start_game_button.addEventListener("click", Game.startGame)
-
-// Save the selected character and update the button states.
-document.querySelectorAll<HTMLButtonElement>(".character-option").forEach(button => {
-    button.addEventListener("click", () => {
-        const character_initials = button.dataset.character
-        if (!character_initials) {
-            return
-        }
-
-        Globals.character_initials = character_initials
-        document.querySelectorAll<HTMLButtonElement>(".character-option").forEach(option => {
-            const is_selected = option === button
-            option.classList.toggle("is-selected", is_selected)
-            option.setAttribute("aria-pressed", is_selected.toString())
-        })
-    })
-})
-
