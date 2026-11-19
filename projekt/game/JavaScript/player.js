@@ -12,7 +12,7 @@ export class Player {
     static character; //DO WYBRANIA POSTACI, PLACEHOLDER
     static character_image_source; //PLACEHOLDER
     static level = "full"; //gdzie postać oberwie efektem przeszkody. low - wślizg, high - skok, full - idzie i obrywa wszystkim co jest
-    static base_speed = 0.01; //bazowa prędkość biegu postaci
+    static base_speed = 1; //bazowa prędkość biegu postaci. Próbowałem, żeby to było z czymś związane, ale nie wyszło. Wartość czysto arbitralna XDDD
     static speed_modifiers = [];
     static movement = 0; //przemieszczenie postaci
     static sfx_jumps = ["jumps/jump1.wav", "jumps/jump2.wav", "jumps/jump3.wav", "jumps/jump4.wav"];
@@ -32,7 +32,7 @@ export class Player {
             case "s":
             case "ArrowDown":
                 console.log("S");
-                // DO ZROBIENIA
+                Player.input_handler.turnOffUntil(Player.slide()).then(() => Player.removeKeyboardHandlerIfGameLoopOff());
                 break;
             case "a":
             case "ArrowLeft":
@@ -60,7 +60,7 @@ export class Player {
         Player.setCharacter(Globals.character_initials);
         Player.sfx_footsteps.setVolume(1);
         Player.sfx_footsteps.start();
-        Player.createSpeedModifier("incremental", 1, 5000, 0.1); // NIE DZIAŁA
+        Player.createSpeedModifier("incremental", 1, 5000, 0.05);
     }
     static async process() {
         Player.calculateMovement();
@@ -93,11 +93,15 @@ export class Player {
         return Player.line;
     }
     static calculateMovement() {
-        let movement = Player.base_speed;
+        let movement = Player.base_speed / Globals.getFramesPerSecond();
         Player.speed_modifiers.forEach(modifier => {
-            movement * modifier;
+            movement = movement * modifier;
         });
+        if (movement > Player.base_speed / Globals.getFramesPerSecond() * 2) {
+            movement = Player.base_speed / Globals.getFramesPerSecond() * 2;
+        }
         Player.movement = movement;
+        Game.updateRanDistance(movement);
     }
     static getLevel() {
         return Player.level;
@@ -113,19 +117,19 @@ export class Player {
         setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms);
     }
     static async changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout) {
-        console.log(Player.speed_modifiers);
-        if (modifier == 1) {
-            Player.deleteSpeedModifier(1);
-            return;
-        }
+        console.log("speed modifiers: " + Player.speed_modifiers.toString());
         switch (type) {
             case "incremental":
                 Player.updateSpeedModifierValue(modifier, modifier + change_for_timeout);
                 modifier += change_for_timeout;
                 break;
-            case "decremental":
-                Player.updateSpeedModifierValue(modifier, modifier - change_for_timeout);
-                modifier -= change_for_timeout;
+            case "slow":
+                if (modifier >= 1) {
+                    Player.deleteSpeedModifier(modifier);
+                    return;
+                }
+                Player.updateSpeedModifierValue(modifier, modifier + change_for_timeout);
+                modifier += change_for_timeout;
                 break;
             default:
                 break;
@@ -169,6 +173,21 @@ export class Player {
         await new Promise((resolve) => setTimeout(resolve, resume_offset));
         Player.unmuteFootSteps();
     }
+    static async slide() {
+        let time_to_get_down = 500;
+        let time_to_get_up = 500;
+        Animation.pauseAnimation();
+        Player.html_handler.setImage("characters/" + Globals.character_initials + "/" + Globals.character_initials + "_duck.png");
+        Player.muteFootSteps();
+        await new Promise((resolve) => setTimeout(resolve, time_to_get_down / 2));
+        Player.level = "low";
+        await new Promise((resolve) => setTimeout(resolve, time_to_get_down / 2));
+        await new Promise((resolve) => setTimeout(resolve, time_to_get_up / 2));
+        Player.level = "low";
+        await new Promise((resolve) => setTimeout(resolve, time_to_get_up / 2));
+        Animation.resumeAnimation();
+        Player.unmuteFootSteps();
+    }
     static removeKeyboardHandlerIfGameLoopOff() {
         if (!Game.isGameLoopOn()) {
             Player.input_handler.delete();
@@ -183,5 +202,8 @@ export class Player {
     }
     static muteFootSteps() {
         Player.sfx_footsteps.setVolume(0);
+    }
+    static slow(modifier) {
+        Player.createSpeedModifier("slow", modifier, 100, (1 - modifier) / 10);
     }
 }

@@ -18,6 +18,7 @@ export class htmlElementHandler {
         this.html_element.style.backgroundSize = "contain";
         this.html_element.style.backgroundRepeat = "no-repeat";
         this.html_element.style.backgroundPosition = "bottom";
+        this.html_element.style.imageRendering = "pixelated";
         this.html_element.style.height = "1000px"; //PLACEHOLDER
     }
     //public setLine()
@@ -26,8 +27,8 @@ export class htmlElementHandler {
         this.html_element.style.left = Line.getLeftPositionAtDistance(line, distance).toString() + "px";
         this.html_element.style.bottom = Line.getBottomPositionAtDistance(distance).toString() + "px";
         this.html_element.style.zIndex = Math.floor(distance * -100 + 100).toString();
-        if (distance > 0.8) {
-            this.html_element.style.opacity = ((1 - distance) * 5).toString();
+        if (distance > 0.95) {
+            this.html_element.style.opacity = ((1 - distance) * 20).toString();
         }
         else {
             this.html_element.style.opacity = "1";
@@ -40,12 +41,5 @@ export class htmlElementHandler {
         this.html_element.remove();
         let i = htmlElementHandler.html_element_handlers.indexOf(this);
         htmlElementHandler.html_element_handlers.splice(i, 1);
-    }
-    static deleteAllByClass(class_name) {
-        htmlElementHandler.html_element_handlers.forEach(handler => {
-            if (handler.html_element.className == class_name) {
-                handler.delete();
-            }
-        });
     }
 }

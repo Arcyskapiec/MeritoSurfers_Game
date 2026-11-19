@@ -49,6 +49,6 @@ export class Sound{
     
     public static playRandom(file_names: string[]): void{
         let i: number = Math.floor(Math.random() * file_names.length)
-        Sound.play(file_names[i], false)
+        Sound.play(file_names[i], false).start()
     }
 }

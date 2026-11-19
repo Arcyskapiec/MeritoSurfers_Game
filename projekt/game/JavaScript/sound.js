@@ -38,6 +38,6 @@ export class Sound {
     }
     static playRandom(file_names) {
         let i = Math.floor(Math.random() * file_names.length);
-        Sound.play(file_names[i], false);
+        Sound.play(file_names[i], false).start();
     }
 }

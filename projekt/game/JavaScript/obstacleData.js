@@ -45,7 +45,7 @@ export class ObstacleData {
                 Player.death();
                 break;
             case "slow":
-                //DO ZROBIENIA
+                Player.slow(0);
                 break;
             default:
                 break;
