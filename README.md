@@ -6,3 +6,8 @@
 - Oleksandr V. - Backend, Node JS, database SQLite
 - Adam Sz. - TO JA I ROBIŁEM SAMĄ GRĘ
 - Krzysztof W. - Frontend aka to co user bedzie widzieć
+
+## Jaki jestem
+[] bardzo fajny
+[] mało fajny
+[X] :<
