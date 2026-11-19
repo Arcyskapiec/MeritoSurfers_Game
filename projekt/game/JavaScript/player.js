@@ -60,6 +60,7 @@ export class Player {
         Player.setCharacter(Globals.character_initials);
         Player.sfx_footsteps.setVolume(1);
         Player.sfx_footsteps.start();
+        Player.deleteAllSpeedModifiers();
         Player.createSpeedModifier("incremental", 1, 5000, 0.05);
     }
     static async process() {
@@ -67,6 +68,7 @@ export class Player {
     }
     static gameEnd() {
         Player.input_handler.delete();
+        Player.deleteAllSpeedModifiers();
         Player.sfx_footsteps.stop();
     }
     static async setLine(line) {
@@ -117,6 +119,9 @@ export class Player {
         setTimeout(() => Player.changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout), timeout_ms);
     }
     static async changeSpeedModifierValue(type, modifier, timeout_ms, change_for_timeout) {
+        if (Player.speed_modifiers.findIndex((active_modifier) => active_modifier == modifier) == -1) {
+            return;
+        }
         console.log("speed modifiers: " + Player.speed_modifiers.toString());
         switch (type) {
             case "incremental":
@@ -143,6 +148,9 @@ export class Player {
     static updateSpeedModifierValue(old_modifier, new_modifier) {
         let i = Player.speed_modifiers.findIndex((modifier) => modifier == old_modifier);
         Player.speed_modifiers[i] = new_modifier;
+    }
+    static deleteAllSpeedModifiers() {
+        Player.speed_modifiers = [];
     }
     static setLevel(level) {
         Player.level = level;
