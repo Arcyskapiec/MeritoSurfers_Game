@@ -18,4 +18,4 @@ node ./backend/start.js
 - Alicja K. - muzyka, sound, SFX
 - Oleksandr V. - backend, Node.js, baza danych SQLite
 - Adam Sz. - struktura gry(TypeScript)
-- Krzysztof W. - frontend (HTML, CSS)
+- Krzysztof W. - frontend (HTML, CSS,)
