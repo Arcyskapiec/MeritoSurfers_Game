@@ -3,10 +3,14 @@ export abstract class Globals{
 
     public static game_window: HTMLDivElement = document.getElementById("game_window") as HTMLDivElement
     public static character_initials: string = "AS" //inicjały osoby, używane przy szukaniu ścieżki do grafiki po folderze z inicjałami, "AS" JAKO PLACEHOLDER
+    
+    //JD edit
+    public static player_nickname: string = ""
+    //JD edit
 
     // SKALOWANIE OKNA GRY ORAZ JEJ ELEMENTÓW 0 0 - górny lewy róg okna, 1 1 - dolny prawy róg okna. czyli 1 to długość całego okna
     public static horizon_height: number = 0.2
-    public static horizon_width: number = 0.3
+    public static horizon_width: number = 0.1
     public static player_position: number = 0.9
     public static monster_position: number = 0.95
 

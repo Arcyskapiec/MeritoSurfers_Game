@@ -48,7 +48,9 @@ export class Obstacle {
         Obstacle.obstacles.splice(i, 1);
     }
     static deleteAllObstacles() {
-        Obstacle.obstacles = [];
+        while (Obstacle.obstacles.length > 0) {
+            Obstacle.obstacles[0].delete();
+        }
     }
     static getObstacles() {
         return Obstacle.obstacles;
@@ -63,7 +65,10 @@ export class Obstacle {
         Obstacle.obstacles.push(new Obstacle(obstacle_type, line));
     }
     move() {
-        this.distance -= Player.getMovement() * (1 - this.distance) + 0.01;
+        if (this.distance == 1) {
+            this.distance -= 0.01;
+        }
+        this.distance -= Player.getMovement() * (1 - this.distance);
         if (this.distance <= -1) {
             this.delete();
             return;

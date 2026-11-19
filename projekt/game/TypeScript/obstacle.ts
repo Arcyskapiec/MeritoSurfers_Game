@@ -61,7 +61,9 @@ export class Obstacle{
     }
 
     public static deleteAllObstacles(): void{
-        Obstacle.obstacles = []
+        while(Obstacle.obstacles.length > 0){
+            Obstacle.obstacles[0].delete()
+        }
     }
 
     public static getObstacles(): Obstacle[]{
@@ -81,7 +83,11 @@ export class Obstacle{
     }
 
     private move(): void {
-        this.distance -= Player.getMovement() * (1 - this.distance) + 0.01
+        if (this.distance == 1){
+            this.distance -= 0.01
+        }
+
+        this.distance -= Player.getMovement() * (1 - this.distance)
 
         if (this.distance <= -1){
             this.delete()

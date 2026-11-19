@@ -2,18 +2,18 @@ import { Player } from "./player.js";
 export class ObstacleData {
     // WSZYSTKIE RODZAJE PRZESZKÓD
     static obstacle_types = [
-        new ObstacleData("obs1", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs2", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs3", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs4", "low", 1, 0.1, true, "death"),
-        new ObstacleData("obs5", "low", 1, 0.1, true, "death")
+        new ObstacleData("obs1", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs2", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs3", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs4", "low", 1, 0.2, true, "death"),
+        new ObstacleData("obs5", "low", 1, 0.2, true, "death")
     ];
     level; // gdzie postać oberwie efektem przeszkody. low - można nad tym przeskoczyć, high - można się pod tym prześlizgnąć, full - nie ma bata
     width; // ile linii zajmuje
     length; // jak "długie" jest
-    name;
-    solid;
-    effect;
+    name; //po nazwie będzie szukać pliku graficznego
+    solid; //czy przeszkoda blokuje linię
+    effect; //death lub slow, SLOW DO ZROBIENIA
     //private img;
     constructor(name, level, width, length, solid, effect) {
         this.width = width;
@@ -45,7 +45,7 @@ export class ObstacleData {
                 Player.death();
                 break;
             case "slow":
-                //DO ZROBIENIA
+                Player.slow(0);
                 break;
             default:
                 break;
