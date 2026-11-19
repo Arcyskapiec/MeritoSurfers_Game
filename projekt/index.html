@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>WSB Surfers</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game_window"></div>
-    <button id="btn_game_start">start</button> 
-    </div>
-</div>
-<!--JD edit-->
+    <main class="game">
+        <header class="game__header">
+            <h1>WSB Surfers</h1>
+        </header>
+
+        <div id="game_window" aria-label="Game area"></div>
+
+        <section class="game__controls" aria-label="Game controls">
+            <button id="btn_game_start" type="button">Start game</button>
+        </section>
+    </main>
+    <script type="module" src="game/JavaScript/game.js"></script>
 </body>
-<script type="module" src="game/JavaScript/game.js"></script>
 </html>
